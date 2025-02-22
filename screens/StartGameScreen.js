@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Button, Text, TextInput, View } from "react-native";
+import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
+
+import PrimaryButton from "../components/PrimaryButton";
 
 const ROCK = "ROCK";
 const PAPER = "PAPER";
@@ -41,14 +43,12 @@ function StartGameScreen() {
             onChangeText={(text) => setEnteredValue(text)}
             value={enteredValue}
           />
-          <Button title="Confirm" onPress={getPlayerChoice} />
+          <PrimaryButton onPress={getPlayerChoice}>Confirm</PrimaryButton>
         </View>
       ) : (
-        <Button
-          title="Start Game"
-          color="#841584"
-          onPress={startNewGameHandler}
-        />
+        <PrimaryButton color="#841584" onPress={startNewGameHandler}>
+          Start Game
+        </PrimaryButton>
       )}
     </View>
   );
