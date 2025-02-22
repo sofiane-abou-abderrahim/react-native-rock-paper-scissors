@@ -23,7 +23,7 @@ function StartGameScreen() {
     console.log("Game is starting...");
   }
 
-  const getPlayerChoice = function () {
+  const getPlayerChoice = () => {
     let selection = enteredValue.toUpperCase();
     if (selection !== ROCK && selection !== PAPER && selection !== SCISSORS) {
       Alert.alert(`Invalid choice! We chose ${DEFAULT_USER_CHOICE} for you!`);
@@ -33,7 +33,7 @@ function StartGameScreen() {
     return selection;
   };
 
-  const getComputerChoice = function () {
+  const getComputerChoice = () => {
     let selection;
     const randomValue = Math.random();
     if (randomValue < 0.34) {
@@ -51,19 +51,14 @@ function StartGameScreen() {
     }
   };
 
-  const getWinner = function (cChoice, pChoice) {
-    if (cChoice === pChoice) {
-      return RESULT_DRAW;
-    } else if (
-      (cChoice === ROCK && pChoice === PAPER) ||
-      (cChoice === PAPER && pChoice === SCISSORS) ||
-      (cChoice === SCISSORS && pChoice === ROCK)
-    ) {
-      return RESULT_PLAYER_WINS;
-    } else {
-      return RESULT_COMPUTER_WINS;
-    }
-  };
+  const getWinner = (cChoice, pChoice) =>
+    cChoice === pChoice
+      ? RESULT_DRAW
+      : (cChoice === ROCK && pChoice === PAPER) ||
+        (cChoice === PAPER && pChoice === SCISSORS) ||
+        (cChoice === SCISSORS && pChoice === ROCK)
+      ? RESULT_PLAYER_WINS
+      : RESULT_COMPUTER_WINS;
 
   return (
     <View>
@@ -78,7 +73,7 @@ function StartGameScreen() {
             autoCorrect={false}
           />
           <PrimaryButton
-            onPress={function () {
+            onPress={() => {
               const playerChoice = getPlayerChoice();
               const computerChoice = getComputerChoice();
               const winner = getWinner(computerChoice, playerChoice);
