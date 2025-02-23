@@ -20,34 +20,33 @@ function StartGameScreen() {
       return;
     }
     setGameIsRunning(true);
+    setEnteredValue("");
     console.log("Game is starting...");
   }
 
   const getPlayerChoice = () => {
-    let selection = enteredValue.toUpperCase();
+    let selection = enteredValue.toUpperCase().trim();
     if (selection !== ROCK && selection !== PAPER && selection !== SCISSORS) {
-      Alert.alert(`Invalid choice! We chose ${DEFAULT_USER_CHOICE} for you!`);
-      selection = DEFAULT_USER_CHOICE;
+      Alert.alert(
+        "Invalid choice!",
+        `We chose ${DEFAULT_USER_CHOICE} for you!`,
+        [
+          { text: "OK", onPress: () => playGame(DEFAULT_USER_CHOICE) }, // ✅ Play continues after the alert
+        ]
+      );
+      return null; // ❌ Nothing is returned here, the game will continue via onPress
     }
-    console.log(`Player chose: ${selection}`);
     return selection;
   };
 
   const getComputerChoice = () => {
-    let selection;
     const randomValue = Math.random();
     if (randomValue < 0.34) {
-      selection = ROCK;
-      console.log(`Computer chose: ${selection}`);
-      return selection;
+      return ROCK;
     } else if (randomValue < 0.67) {
-      selection = PAPER;
-      console.log(`Computer chose: ${selection}`);
-      return selection;
+      return PAPER;
     } else {
-      selection = SCISSORS;
-      console.log(`Computer chose: ${selection}`);
-      return selection;
+      return SCISSORS;
     }
   };
 
@@ -59,6 +58,30 @@ function StartGameScreen() {
         (cChoice === SCISSORS && pChoice === ROCK)
       ? RESULT_PLAYER_WINS
       : RESULT_COMPUTER_WINS;
+
+  const playGame = (playerChoice) => {
+    const computerChoice = getComputerChoice();
+    const winner = getWinner(computerChoice, playerChoice);
+
+    let message = `You picked ${playerChoice}, computer picked ${computerChoice}, therefore you `;
+    if (winner === RESULT_DRAW) {
+      message += "had a DRAW.";
+    } else if (winner === RESULT_PLAYER_WINS) {
+      message += "WON.";
+    } else {
+      message += "LOST.";
+    }
+
+    Alert.alert("Game Result", message, [
+      {
+        text: "OK",
+        onPress: () => {
+          setGameIsRunning(false);
+          setEnteredValue("");
+        },
+      },
+    ]);
+  };
 
   return (
     <View>
@@ -75,9 +98,9 @@ function StartGameScreen() {
           <PrimaryButton
             onPress={() => {
               const playerChoice = getPlayerChoice();
-              const computerChoice = getComputerChoice();
-              const winner = getWinner(computerChoice, playerChoice);
-              console.log(`Result: ${winner}`);
+              if (playerChoice) {
+                playGame(playerChoice);
+              }
             }}
           >
             Confirm
